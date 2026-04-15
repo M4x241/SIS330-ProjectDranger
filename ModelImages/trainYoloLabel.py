@@ -32,4 +32,4 @@ def entrenar_modelo():
     print(f"Tus pesos 'labelSmoke' están en: {results.save_dir}/weights/bestlabelSmoke.pt")
 
 if __name__ == '__main__':
-    entrenar_modelo()cd 
+    entrenar_modelo()
