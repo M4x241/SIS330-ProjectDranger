@@ -8,7 +8,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Modelo entrenado
-model = YOLO('/home/ghost/Documents/Proyectos/python/Proyecto Python/Servidor/best100Yolo.pt')
+model = YOLO('/home/ghost/Documents/Proyectos/python/Proyecto Python/ModelImages/Results/bestv2.pt')
 save_dir = "/home/ghost/Documents/Proyectos/python/Proyecto Python/Servidor/signalSmoke"
 
 # crear carpeta si no existe
@@ -24,7 +24,7 @@ def upload():
     frame = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
 
     # Inferencia YOLO
-    results = model(frame, conf=0.5)
+    results = model(frame, conf=0.2)
 
     result = results[0]
     detections = len(result.boxes)

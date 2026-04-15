@@ -4,7 +4,7 @@ import os
 # 1. Rutas del sistema (KDE Neon / Ghost)
 DATASET_DIR = "/home/ghost/Music/humo"
 YAML_PATH = os.path.join(DATASET_DIR, "data.yaml")
-
+    
 def entrenar_modelo():
     print(f"--- Iniciando entrenamiento en: {DATASET_DIR} ---")
     
@@ -32,4 +32,4 @@ def entrenar_modelo():
     print(f"Tus pesos 'labelSmoke' están en: {results.save_dir}/weights/bestlabelSmoke.pt")
 
 if __name__ == '__main__':
-    entrenar_modelo()
+    entrenar_modelo()cd 

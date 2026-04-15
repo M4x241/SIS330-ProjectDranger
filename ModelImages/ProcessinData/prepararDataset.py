@@ -1,6 +1,58 @@
 import json
 import os
 import glob
+import random
+import shutil
+
+def split_dataset(dataset_path, train_ratio=0.75):
+    # Obtener todos los archivos JSON en la carpeta raíz
+    json_files = glob.glob(os.path.join(dataset_path, "*.json"))
+    paired_files = [(json_file, os.path.splitext(json_file)[0] + ".jpg") for json_file in json_files]
+    paired_files += [(json_file, os.path.splitext(json_file)[0] + ".png") for json_file in json_files]
+
+    # Filtrar pares válidos (donde existan ambos archivos)
+    valid_pairs = [(json_file, img_file) for json_file, img_file in paired_files if os.path.exists(img_file)]
+
+    # Mezclar aleatoriamente los pares
+    random.shuffle(valid_pairs)
+
+    # Dividir en train y test
+    train_size = int(len(valid_pairs) * train_ratio)
+    train_pairs = valid_pairs[:train_size]
+    test_pairs = valid_pairs[train_size:]
+
+    # Crear carpetas train y test
+    train_path = os.path.join(dataset_path, "train")
+    
+    # Procesar imágenes de fondo
+    background_path = "/home/ghost/Music/background"
+    background_images = glob.glob(os.path.join(background_path, "*.jpg")) + glob.glob(os.path.join(background_path, "*.png"))
+    
+    # Crear pares de fondo con archivos .txt vacíos
+    background_pairs = [(img_file, os.path.splitext(img_file)[0] + ".txt") for img_file in background_images]
+    for _, txt_file in background_pairs:
+        with open(txt_file, 'w') as f:
+            pass  # Crear archivo .txt vacío si no existe
+
+    # Mezclar imágenes de fondo con el dataset
+    random.shuffle(background_pairs)
+    train_size_bg = int(len(background_pairs) * train_ratio)
+    train_pairs += background_pairs[:train_size_bg]
+    test_pairs += background_pairs[train_size_bg:]
+    test_path = os.path.join(dataset_path, "test")
+    os.makedirs(train_path, exist_ok=True)
+    os.makedirs(test_path, exist_ok=True)
+
+    # Mover archivos a sus respectivas carpetas
+    for json_file, img_file in train_pairs:
+        shutil.move(json_file, os.path.join(train_path, os.path.basename(json_file)))
+        shutil.move(img_file, os.path.join(train_path, os.path.basename(img_file)))
+
+    for json_file, img_file in test_pairs:
+        shutil.move(json_file, os.path.join(test_path, os.path.basename(json_file)))
+        shutil.move(img_file, os.path.join(test_path, os.path.basename(img_file)))
+
+    print("¡Datos divididos en train y test!")
 
 def convert_labelme_to_yolo(dataset_path):
     # Carpetas a procesar
@@ -65,4 +117,6 @@ def convert_labelme_to_yolo(dataset_path):
     print("¡Dataset organizado y convertido!")
 
 if __name__ == "__main__":
-    convert_labelme_to_yolo("/home/ghost/Music/humo")
+    dataset_path = "/home/ghost/Music/humo"
+    split_dataset(dataset_path)
+    convert_labelme_to_yolo(dataset_path)

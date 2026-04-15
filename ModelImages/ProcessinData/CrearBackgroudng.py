@@ -1,7 +1,7 @@
 import os
 
 # 📂 carpeta donde están tus imágenes
-images_dir = "/home/ghost/Music/background"
+images_dir = "/home/ghost/Music/background/"
 
 # 📂 carpeta donde se guardarán los labels
 labels_dir = "/home/ghost/Music/background"

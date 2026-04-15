@@ -75,7 +75,7 @@ import torch.nn as nn
 # --- CONFIGURACIÓN ---
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
-MODEL_PATH = "/home/ghost/Documents/Proyectos/python/Proyecto Python/detector_motosierra_crnn.pth"
+MODEL_PATH = "/home/ghost/Documents/Proyectos/python/Proyecto Python/ModelSounds/Results/detector_motosierra_crnn.pth"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
